@@ -5,7 +5,7 @@ import com.multitap.feedback.adaptor.out.vo.OcrResponseVo;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface ClovaOcrApiPort {
+public interface OcrApiPort {
 
-    OcrResponseVo callClovarOcrApi(OcrRequestVo ocrRequestVo);
+    OcrResponseVo callOcrApi(OcrRequestVo ocrRequestVo);
 }

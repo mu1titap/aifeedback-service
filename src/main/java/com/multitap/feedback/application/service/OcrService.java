@@ -2,19 +2,21 @@ package com.multitap.feedback.application.service;
 
 import com.multitap.feedback.adaptor.in.vo.OcrRequestVo;
 import com.multitap.feedback.adaptor.out.vo.OcrResponseVo;
-import com.multitap.feedback.application.port.in.ClovarOcrUseCase;
-import com.multitap.feedback.application.port.out.ClovaOcrApiPort;
+import com.multitap.feedback.application.port.in.OcrUseCase;
+import com.multitap.feedback.application.port.out.OcrApiPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @RequiredArgsConstructor
 @Service
-public class ClovarOcrService implements ClovarOcrUseCase {
+public class OcrService implements OcrUseCase {
 
-    private final ClovaOcrApiPort clovaOcrApiPort;
+    private final OcrApiPort ocrApiPort;
 
     @Override
     public OcrResponseVo analyzeImage(OcrRequestVo ocrRequestVo) {
-        return clovaOcrApiPort.callClovarOcrApi(ocrRequestVo);
+        return ocrApiPort.callOcrApi(ocrRequestVo);
     }
+
 }

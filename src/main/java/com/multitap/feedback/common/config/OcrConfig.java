@@ -8,15 +8,15 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Configuration
-public class ClovaOcrConfig extends BaseRestTemplateConfig {
+public class OcrConfig extends BaseRestTemplateConfig {
 
-    @Value("${clova.api.key}")
-    private String clovaKey;
+    @Value("${ocr.api.key}")
+    private String ocrKey;
 
-    @Bean(name = "clovaRestTemplate")
-    public RestTemplate clovaRestTemplate() {
+    @Bean(name = "ocrRestTemplate")
+    public RestTemplate ocrRestTemplate() {
         log.info("Initializing Clova OCR RestTemplate...");
-        return createRestTemplate("X-OCR-SECRET", clovaKey);
+        return createRestTemplate("X-OCR-SECRET", ocrKey);
     }
 }
 

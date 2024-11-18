@@ -2,7 +2,7 @@ package com.multitap.feedback.adaptor.out;
 
 import com.multitap.feedback.adaptor.in.vo.OcrRequestVo;
 import com.multitap.feedback.adaptor.out.vo.OcrResponseVo;
-import com.multitap.feedback.application.port.out.ClovaOcrApiPort;
+import com.multitap.feedback.application.port.out.OcrApiPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,19 +11,19 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
-public class ClovarOcrAdapter implements ClovaOcrApiPort {
+public class OcrApiAdapter implements OcrApiPort {
 
-    private final RestTemplate clovaRestTemplate;
+    private final RestTemplate ocrRestTemplate;
 
-    public ClovarOcrAdapter(@Qualifier("clovaRestTemplate") RestTemplate clovarRestTemplate) {
-        this.clovaRestTemplate = clovarRestTemplate;
+    public OcrApiAdapter(@Qualifier("ocrRestTemplate") RestTemplate ocrRestTemplate) {
+        this.ocrRestTemplate= ocrRestTemplate;
     }
 
-    @Value("${clova.api.url}")
+    @Value("${ocr.api.url}")
     private String apiURL;
 
     @Override
-    public OcrResponseVo callClovarOcrApi(OcrRequestVo ocrRequestVo) {
-
+    public OcrResponseVo callOcrApi(OcrRequestVo ocrRequestVo) {
+        return new OcrResponseVo();
     }
 }

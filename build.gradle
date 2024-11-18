@@ -40,7 +40,7 @@ dependencies {
     // JSON 파싱 (Jackson)
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-    // 클로바 OCR 사용을 위한 Base64 인코딩/디코딩 (Java 기본 패키지에 포함되지만 옵션으로 추가 가능)
+    // 클로바 OCR 사용을 위한 Base64 인코딩/디코딩
     implementation 'commons-codec:commons-codec:1.15'
 
 }
