@@ -15,4 +15,11 @@ public class OcrRequestVo {
     public OcrRequestVo(MultipartFile file) {
         this.file = file;
     }
+
+    public static OcrRequestVo from(MultipartFile file) {
+        return OcrRequestVo.builder()
+                .file(file)
+                .build();
+    }
+
 }

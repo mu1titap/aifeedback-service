@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class GptService implements GptUseCase {
+public class APIService implements GptUseCase {
 
     private final GptApiPort gptApiPort;
 

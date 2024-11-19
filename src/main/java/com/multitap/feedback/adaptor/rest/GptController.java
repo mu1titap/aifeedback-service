@@ -2,7 +2,6 @@ package com.multitap.feedback.adaptor.rest;
 
 import com.multitap.feedback.adaptor.in.vo.GptRequestVo;
 import com.multitap.feedback.adaptor.out.vo.GptResponseVo;
-import com.multitap.feedback.application.port.dto.out.GptResponseDto;
 import com.multitap.feedback.application.port.in.GptUseCase;
 import com.multitap.feedback.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
