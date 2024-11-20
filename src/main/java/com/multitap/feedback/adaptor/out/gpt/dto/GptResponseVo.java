@@ -1,4 +1,4 @@
-package com.multitap.feedback.adaptor.out.vo;
+package com.multitap.feedback.adaptor.out.gpt.dto;
 
 import lombok.Builder;
 import lombok.Getter;

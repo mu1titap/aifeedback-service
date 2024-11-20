@@ -1,9 +1,8 @@
-package com.multitap.feedback.adaptor.out;
+package com.multitap.feedback.adaptor.out.gpt.presentation;
 
-import com.multitap.feedback.adaptor.in.vo.GptRequestVo;
-import com.multitap.feedback.adaptor.out.vo.GptResponseVo;
-import com.multitap.feedback.application.port.dto.in.GptRequestDto;
-import com.multitap.feedback.application.port.dto.out.GptResponseDto;
+import com.multitap.feedback.adaptor.out.gpt.dto.GptResponseVo;
+import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
+import com.multitap.feedback.application.port.in.dto.out.GptResponseDto;
 import com.multitap.feedback.application.port.out.GptApiPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,8 +28,8 @@ public class GptApiAdapter implements GptApiPort {
     private String apiURL;
 
     @Override
-    public GptResponseVo callGptApi(GptRequestVo gptRequestVo) {
-        GptResponseDto gptResponseDto = gptRestTemplate.postForObject(apiURL, GptRequestDto.from(gptRequestVo, model), GptResponseDto.class);
+    public GptResponseVo callGptApi(GptRequestDto gptRequestDto) {
+        GptResponseDto gptResponseDto = gptRestTemplate.postForObject(apiURL, GptRequestDto.from(model), GptResponseDto.class);
         return GptResponseVo.from(gptResponseDto.getChoices().get(0).getMessage().getContent());
     }
 

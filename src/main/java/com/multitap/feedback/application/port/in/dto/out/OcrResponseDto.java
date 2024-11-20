@@ -1,4 +1,4 @@
-package com.multitap.feedback.adaptor.out.vo;
+package com.multitap.feedback.application.port.in.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OcrResponseVo {
+public class OcrResponseDto {
     private String version;
     private String requestId;
     private long timestamp;

@@ -1,4 +1,4 @@
-package com.multitap.feedback.adaptor.in.vo;
+package com.multitap.feedback.application.port.in.dto.in;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,12 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
-public class OcrRequestVo {
+public class OcrRequestDto {
 
     private MultipartFile file;
 
     @Builder
-    public OcrRequestVo(MultipartFile file) {
+    public OcrRequestDto(MultipartFile file) {
         this.file = file;
     }
 }

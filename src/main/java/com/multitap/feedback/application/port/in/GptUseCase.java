@@ -1,9 +1,8 @@
 package com.multitap.feedback.application.port.in;
 
-import com.multitap.feedback.adaptor.in.vo.GptRequestVo;
-import com.multitap.feedback.adaptor.out.vo.GptResponseVo;
+import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
 
 public interface GptUseCase {
 
-    GptResponseVo handleChat(GptRequestVo gptRequestVo);
+    void sendFeedbackRequestToPort(GptRequestDto gptRequestDto);
 }

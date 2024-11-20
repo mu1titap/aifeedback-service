@@ -1,6 +1,6 @@
-package com.multitap.feedback.application.port.dto.out;
+package com.multitap.feedback.application.port.in.dto.out;
 
-import com.multitap.feedback.application.port.dto.in.Message;
+import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
 import lombok.*;
 
 import java.util.List;
@@ -22,6 +22,6 @@ public class GptResponseDto {
     @AllArgsConstructor
     public static class Choice {
         private int index;
-        private Message message;
+        private GptRequestDto.Message message;
     }
 }

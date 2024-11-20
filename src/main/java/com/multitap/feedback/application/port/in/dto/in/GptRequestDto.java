@@ -1,6 +1,5 @@
-package com.multitap.feedback.application.port.dto.in;
+package com.multitap.feedback.application.port.in.dto.in;
 
-import com.multitap.feedback.adaptor.in.vo.GptRequestVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +21,24 @@ public class GptRequestDto {
         this.messages.add((new Message("user", prompt)));
     }
 
-    public static GptRequestDto from(GptRequestVo gptRequestVo, String model) {
+    public static GptRequestDto from(String model) {
         return GptRequestDto.builder()
                 .model(model)
-                .prompt(gptRequestVo.getPrompt())
                 .build();
     }
 
+
+    @Getter
+    @NoArgsConstructor
+    public static class Message {
+
+        private String role;
+        private String content;
+
+        @Builder
+        public Message(String role, String content) {
+            this.role = role;
+            this.content = content;
+        }
+    }
 }

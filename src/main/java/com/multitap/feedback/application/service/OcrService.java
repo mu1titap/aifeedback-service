@@ -1,9 +1,10 @@
 package com.multitap.feedback.application.service;
 
-import com.multitap.feedback.adaptor.in.vo.OcrRequestVo;
-import com.multitap.feedback.adaptor.out.vo.OcrResponseVo;
-import com.multitap.feedback.application.port.dto.in.OcrRequestDto;
+import com.multitap.feedback.application.mapper.OcrDtoMapper;
+import com.multitap.feedback.application.port.in.dto.in.OcrImageDto;
+import com.multitap.feedback.application.port.in.dto.in.OcrRequestDto;
 import com.multitap.feedback.application.port.in.OcrUseCase;
+import com.multitap.feedback.application.port.in.dto.out.OcrResponseDto;
 import com.multitap.feedback.application.port.out.OcrApiPort;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -27,19 +28,22 @@ public class OcrService implements OcrUseCase {
     private final OcrApiPort ocrApiPort;
 
     @Override
-    public List<OcrResponseVo> analyzeImage(OcrRequestVo ocrRequestVo) throws IOException {
+    public List<OcrResponseDto> analyzeImage(OcrRequestDto ocrRequestDto) throws IOException {
 
-        return ocrApiPort.callOcrApi(convertPdfToImages(ocrRequestVo));
+        return ocrApiPort.callOcrApi(convertPdfToImages(ocrRequestDto));
 
-    }
+        // todo 1: 위에서 리턴받은 List<OcrResponseDto> 을 파싱
+        // todo 2: 파싱된 텍스트를  GPT 이용하는 아웃포트에 요청
+        // todo 3: gpt에게 받은 피드백 내용을 리턴
+     }
 
-    public OcrRequestDto convertPdfToImages(OcrRequestVo ocrRequestVo) throws IOException {
+    public OcrImageDto convertPdfToImages(OcrRequestDto ocrRequestDto) throws IOException {
 
         List<File> imageFiles = new ArrayList<>();
 
         // 임시 디렉토리 생성
         Path tempDir = Files.createTempDirectory("ocr-");
-        PDDocument document = PDDocument.load(ocrRequestVo.getFile().getInputStream());
+        PDDocument document = PDDocument.load(ocrRequestDto.getFile().getInputStream());
         PDFRenderer pdfRenderer = new PDFRenderer(document);
 
         for (int pageIndex = 0; pageIndex < document.getNumberOfPages(); pageIndex++) {
@@ -55,6 +59,8 @@ public class OcrService implements OcrUseCase {
 
         document.close();
 
-        return OcrRequestDto.from(imageFiles);
+        return OcrDtoMapper.from(imageFiles);
     }
+
+
 }
