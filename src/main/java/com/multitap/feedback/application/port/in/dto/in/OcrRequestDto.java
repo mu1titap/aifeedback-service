@@ -15,4 +15,5 @@ public class OcrRequestDto {
     public OcrRequestDto(MultipartFile file) {
         this.file = file;
     }
+
 }

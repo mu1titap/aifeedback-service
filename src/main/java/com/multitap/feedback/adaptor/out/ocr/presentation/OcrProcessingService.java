@@ -1,6 +1,6 @@
 package com.multitap.feedback.adaptor.out.ocr.presentation;
 
-import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
+import com.multitap.feedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.feedback.application.port.in.dto.out.OcrResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,13 +17,13 @@ public class OcrProcessingService {
     private static final double CONFIDENCE_THRESHOLD = 0.7; // 신뢰도 임계값
 
 
-    public GptRequestDto parseOcrResponses(List<OcrResponseDto> responses) {
+    public OcrProcessedFeedbackRequest parseOcrResponses(List<OcrResponseDto> responses) {
         String combinedText = responses.stream()
                 .flatMap(response -> response.getImages().stream())
                 .map(this::parseSingleImage)
                 .collect(Collectors.joining("\n"));
 
-        return GptRequestDto.from(combinedText);
+        return OcrProcessedFeedbackRequest.from(combinedText);
     }
 
     private String parseSingleImage(OcrResponseDto.Image image) {

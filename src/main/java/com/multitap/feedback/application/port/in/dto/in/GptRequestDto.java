@@ -21,9 +21,10 @@ public class GptRequestDto {
         this.messages.add((new Message("user", prompt)));
     }
 
-    public static GptRequestDto from(String model) {
+    public static GptRequestDto from(String model, String prompt) {
         return GptRequestDto.builder()
                 .model(model)
+                .prompt(prompt)
                 .build();
     }
 

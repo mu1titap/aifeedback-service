@@ -1,7 +1,9 @@
 package com.multitap.feedback.application.service;
 
+import com.multitap.feedback.adaptor.out.ocr.presentation.OcrProcessingService;
 import com.multitap.feedback.application.mapper.OcrDtoMapper;
-import com.multitap.feedback.application.port.in.dto.in.OcrImageDto;
+import com.multitap.feedback.application.port.in.dto.in.OcrInputImageDto;
+import com.multitap.feedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.feedback.application.port.in.dto.in.OcrRequestDto;
 import com.multitap.feedback.application.port.in.OcrUseCase;
 import com.multitap.feedback.application.port.in.dto.out.OcrResponseDto;
@@ -26,18 +28,23 @@ import java.util.List;
 public class OcrService implements OcrUseCase {
 
     private final OcrApiPort ocrApiPort;
+    private final OcrProcessingService ocrProcessingService;
 
     @Override
-    public List<OcrResponseDto> analyzeImage(OcrRequestDto ocrRequestDto) throws IOException {
+    public OcrProcessedFeedbackRequest uploadPdfForOcr(OcrRequestDto ocrRequestDto) throws IOException {
 
-        return ocrApiPort.callOcrApi(convertPdfToImages(ocrRequestDto));
+        // 이미지 분석
+        List<OcrResponseDto> ocrResponses = ocrApiPort.callOcrApi(convertPdfToImages(ocrRequestDto));
 
-        // todo 1: 위에서 리턴받은 List<OcrResponseDto> 을 파싱
-        // todo 2: 파싱된 텍스트를  GPT 이용하는 아웃포트에 요청
-        // todo 3: gpt에게 받은 피드백 내용을 리턴
-     }
+        // OCR 결과 데이터 파싱
+        return ocrProcessingService.parseOcrResponses(ocrResponses);
 
-    public OcrImageDto convertPdfToImages(OcrRequestDto ocrRequestDto) throws IOException {
+    }
+
+
+
+    // pdf 파일 이미지화
+    public OcrInputImageDto convertPdfToImages(OcrRequestDto ocrRequestDto) throws IOException {
 
         List<File> imageFiles = new ArrayList<>();
 

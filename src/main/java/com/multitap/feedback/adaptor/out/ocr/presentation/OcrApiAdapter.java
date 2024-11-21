@@ -1,10 +1,9 @@
 package com.multitap.feedback.adaptor.out.ocr.presentation;
+
 import com.multitap.feedback.application.port.in.GptUseCase;
-import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
-import com.multitap.feedback.application.port.in.dto.in.OcrRequestDto;
+import com.multitap.feedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.feedback.application.port.in.dto.out.OcrResponseDto;
-import com.multitap.feedback.application.port.in.dto.in.OcrImageDto;
-import com.multitap.feedback.application.port.out.GptApiPort;
+import com.multitap.feedback.application.port.in.dto.in.OcrInputImageDto;
 import com.multitap.feedback.application.port.out.OcrApiPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,29 +23,21 @@ import java.util.*;
 public class OcrApiAdapter implements OcrApiPort {
 
     private final RestTemplate ocrRestTemplate;
-    private final OcrProcessingService ocrProcessingService;
-    private final GptUseCase gptUseCase;
 
     @Value("${ocr.api.url}")
     private String apiURL;
 
-    public OcrApiAdapter(@Qualifier("ocrRestTemplate") RestTemplate ocrRestTemplate, OcrProcessingService ocrProcessingService, GptUseCase gptUseCase) {
+    public OcrApiAdapter(@Qualifier("ocrRestTemplate") RestTemplate ocrRestTemplate) {
         this.ocrRestTemplate = ocrRestTemplate;
-        this.ocrProcessingService = ocrProcessingService;
-        this.gptUseCase = gptUseCase;
     }
 
-    // todo 1: 위에서 리턴받은 List<OcrResponseDto> 을 파싱
-    // todo 2: 파싱된 텍스트를  GPT 이용하는 아웃포트에 요청
-    // todo 3: gpt에게 받은 피드백 내용을 리턴
-
     @Override
-    public List<OcrResponseDto> callOcrApi(OcrImageDto ocrImageDto) {
+    public List<OcrResponseDto> callOcrApi(OcrInputImageDto ocrInputImageDto) {
         List<OcrResponseDto> responseList = new ArrayList<>();
 
         try {
             // 이미지 파일을 하나씩 반복하여 OCR API 호출
-            for (File imageFile : ocrImageDto.getImageFiles()) {
+            for (File imageFile : ocrInputImageDto.getImageFiles()) {
                 // 요청 엔티티 생성 (헤더에서 X-OCR-SECRET을 자동으로 추가)
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = createHttpEntity(imageFile);
 
@@ -70,26 +61,26 @@ public class OcrApiAdapter implements OcrApiPort {
         return responseList;
     }
 
-    @Override
-    public void aksFeedback(OcrImageDto ocrImageDto) {
-        try {
-            // 1. OCR API 호출하여 OCR 결과를 가져오기
-            List<OcrResponseDto> ocrResponses = callOcrApi(ocrImageDto);
-            log.info("OCR 결과: {}", ocrResponses);
-
-            // 2. OCR 결과를 파싱하여 GPT 요청 데이터로 변환
-            GptRequestDto gptRequestDto = ocrProcessingService.parseOcrResponses(ocrResponses);
-            log.info("GPT 요청 데이터 생성 완료: {}", gptRequestDto);
-
-            // 3. 포트를 통해 GPT 요청 전달
-            gptUseCase.sendFeedbackRequestToPort(gptRequestDto);
-            log.info("GPT 요청 데이터 포트로 전달 완료");
-
-        } catch (Exception e) {
-            log.error("피드백 요청 처리 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("피드백 요청 처리 실패", e);
-        }
-    }
+//    @Override
+//    public void aksFeedback(OcrInputImageDto ocrInputImageDto) {
+//        try {
+//            // 1. OCR API 호출하여 OCR 결과를 가져오기
+//            List<OcrResponseDto> ocrResponses = callOcrApi(ocrInputImageDto);
+//            log.info("OCR 결과: {}", ocrResponses);
+//
+//            // 2. OCR 결과를 파싱하여 GPT 요청 데이터로 변환
+//            OcrProcessedFeedbackRequest ocrProcessedFeedbackRequest = ocrProcessingService.parseOcrResponses(ocrResponses);
+//            log.info("GPT 요청 데이터 생성 완료: {}", ocrProcessedFeedbackRequest);
+//
+//            // 3. 포트를 통해 GPT 요청 전달
+//            gptUseCase.sendFeedbackRequestToGpt(ocrProcessedFeedbackRequest);
+//            log.info("GPT 요청 데이터 포트로 전달 완료");
+//
+//        } catch (Exception e) {
+//            log.error("피드백 요청 처리 중 오류 발생: {}", e.getMessage(), e);
+//            throw new RuntimeException("피드백 요청 처리 실패", e);
+//        }
+//    }
 
 
     private HttpEntity<MultiValueMap<String, Object>> createHttpEntity(File imageFile) {

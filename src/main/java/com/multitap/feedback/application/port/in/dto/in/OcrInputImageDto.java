@@ -10,11 +10,11 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class OcrImageDto {
+public class OcrInputImageDto {
     private List<File> imageFiles;
 
     @Builder
-    public OcrImageDto(List<File> imageFiles) {
+    public OcrInputImageDto(List<File> imageFiles) {
         this.imageFiles = imageFiles;
     }
 
