@@ -38,7 +38,7 @@ public class OcrApiAdapter implements OcrApiPort {
         try {
             // 이미지 파일을 하나씩 반복하여 OCR API 호출
             for (File imageFile : ocrInputImageDto.getImageFiles()) {
-                // 요청 엔티티 생성 (헤더에서 X-OCR-SECRET을 자동으로 추가)
+
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = createHttpEntity(imageFile);
 
                 // OCR API 호출
@@ -60,27 +60,6 @@ public class OcrApiAdapter implements OcrApiPort {
 
         return responseList;
     }
-
-//    @Override
-//    public void aksFeedback(OcrInputImageDto ocrInputImageDto) {
-//        try {
-//            // 1. OCR API 호출하여 OCR 결과를 가져오기
-//            List<OcrResponseDto> ocrResponses = callOcrApi(ocrInputImageDto);
-//            log.info("OCR 결과: {}", ocrResponses);
-//
-//            // 2. OCR 결과를 파싱하여 GPT 요청 데이터로 변환
-//            OcrProcessedFeedbackRequest ocrProcessedFeedbackRequest = ocrProcessingService.parseOcrResponses(ocrResponses);
-//            log.info("GPT 요청 데이터 생성 완료: {}", ocrProcessedFeedbackRequest);
-//
-//            // 3. 포트를 통해 GPT 요청 전달
-//            gptUseCase.sendFeedbackRequestToGpt(ocrProcessedFeedbackRequest);
-//            log.info("GPT 요청 데이터 포트로 전달 완료");
-//
-//        } catch (Exception e) {
-//            log.error("피드백 요청 처리 중 오류 발생: {}", e.getMessage(), e);
-//            throw new RuntimeException("피드백 요청 처리 실패", e);
-//        }
-//    }
 
 
     private HttpEntity<MultiValueMap<String, Object>> createHttpEntity(File imageFile) {

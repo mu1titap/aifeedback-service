@@ -69,5 +69,4 @@ public class OcrService implements OcrUseCase {
         return OcrDtoMapper.from(imageFiles);
     }
 
-
 }

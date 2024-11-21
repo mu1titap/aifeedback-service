@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+//todo:이 아이는 어느 패키지에 소속되어야 하는지 궁금합니다!
 public class OcrProcessingService {
 
     private static final int Y_THRESHOLD = 10; // 같은 줄로 인식할 Y좌표 차이 임계값

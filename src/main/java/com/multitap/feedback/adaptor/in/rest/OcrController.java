@@ -26,7 +26,6 @@ public class OcrController {
     @Operation(summary = "피드백 받을 pdf 파일(이력서,포트폴리오)를 업로드", description = "pdf 파일 용량은 10MB로 제한")
     @PostMapping(value = "/submit", consumes = "multipart/form-data")
     public BaseResponse<GptResponseVo> submit(@RequestParam("file") MultipartFile file) throws IOException {
-
         // OCR 분석
         OcrProcessedFeedbackRequest ocrProcessedFeedbackRequest = ocrUseCase.uploadPdfForOcr(OcrVoMapper.from(file));
 
