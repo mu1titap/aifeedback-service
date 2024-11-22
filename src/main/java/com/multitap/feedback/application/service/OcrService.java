@@ -22,9 +22,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class OcrService implements OcrUseCase {
 
     private final OcrApiPort ocrApiPort;
@@ -40,7 +39,6 @@ public class OcrService implements OcrUseCase {
         return ocrProcessingService.parseOcrResponses(ocrResponses);
 
     }
-
 
 
     // pdf 파일 이미지화

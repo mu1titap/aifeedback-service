@@ -45,6 +45,9 @@ dependencies {
 
     // PDF 처리
     implementation 'org.apache.pdfbox:pdfbox:2.0.31'
+
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 tasks.named('test') {

@@ -1,6 +1,6 @@
 package com.multitap.feedback.adaptor.out.gpt.presentation;
 
-import com.multitap.feedback.adaptor.out.gpt.dto.GptResponseVo;
+import com.multitap.feedback.adaptor.out.gpt.vo.GptResponseVo;
 import com.multitap.feedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.feedback.application.port.in.dto.in.GptRequestDto;
 import com.multitap.feedback.application.port.in.dto.out.GptResponseDto;

@@ -1,4 +1,4 @@
-package com.multitap.feedback.adaptor.out.ocr.dto;
+package com.multitap.feedback.adaptor.out.ocr.vo;
 
 //package com.multitap.feedback.adaptor.out.vo;
 //
