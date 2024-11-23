@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OcrProcessedFeedbackRequest {
 
-    private String prompt;
+    private String content;
 
     @Builder
-    public OcrProcessedFeedbackRequest(String prompt) {
-        this.prompt = prompt;
+    public OcrProcessedFeedbackRequest(String content) {
+        this.content = content;
     }
 
-    public static OcrProcessedFeedbackRequest from(String prompt){
+    public static OcrProcessedFeedbackRequest from(String content){
         return OcrProcessedFeedbackRequest.builder()
-                .prompt(prompt)
+                .content(content)
                 .build();
     }
 

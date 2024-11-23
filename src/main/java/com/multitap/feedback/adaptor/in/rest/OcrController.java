@@ -2,9 +2,8 @@ package com.multitap.feedback.adaptor.in.rest;
 
 import com.multitap.feedback.adaptor.in.mapper.OcrVoMapper;
 import com.multitap.feedback.adaptor.in.mapper.PromptVoMapper;
-import com.multitap.feedback.adaptor.in.vo.PromptRequestVo;
 import com.multitap.feedback.adaptor.out.gpt.vo.GptResponseVo;
-import com.multitap.feedback.adaptor.out.prompt.vo.PromptResponseVo;
+import com.multitap.feedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import com.multitap.feedback.application.port.in.GptUseCase;
 import com.multitap.feedback.application.port.in.OcrUseCase;
 import com.multitap.feedback.application.port.in.PromptUseCase;
@@ -30,17 +29,22 @@ public class OcrController {
 
     @Operation(summary = "피드백 받을 pdf 파일(이력서,포트폴리오)를 업로드", description = "pdf 파일 용량은 10MB로 제한")
     @PostMapping(value = "/submit", consumes = "multipart/form-data")
-    public BaseResponse<GptResponseVo> submit(@RequestParam("file") MultipartFile file, @RequestBody PromptRequestVo promptRequestVo) throws IOException {
+    public BaseResponse<GptResponseVo> submit(@RequestParam("file") MultipartFile file, @RequestParam("industryType") String industryType,
+                                              @RequestParam("documentType") String documentType) throws IOException {
+
+        log.info("산업,문서타입: {},{}", industryType, documentType);
 
         // OCR 분석
         OcrProcessedFeedbackRequest ocrProcessedFeedbackRequest = ocrUseCase.uploadPdfForOcr(OcrVoMapper.from(file));
+        log.info("ocr 분석 완료 : {}", ocrProcessedFeedbackRequest.getContent());
 
         // ocr 분석 값과 프롬프트 합치기
-        PromptResponseVo promptResponseVo = promptUseCase.sendRequestPrompt(PromptVoMapper.from(promptRequestVo));
+        PromptDetailsResponseVo promptDetailsResponseVo = promptUseCase.sendRequestPrompt(PromptVoMapper.from(industryType,documentType));
+        log.info("프롬프트 : {}", promptDetailsResponseVo.getRequest());
 
         // GPT 피드백 요청
-        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(ocrProcessedFeedbackRequest);
-        log.info("GPT API 피드백 요청 값 : {}", ocrProcessedFeedbackRequest.getPrompt());
+        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(ocrProcessedFeedbackRequest, promptDetailsResponseVo);
+        log.info("GPT API 피드백 요청 값 : {}", ocrProcessedFeedbackRequest.getContent());
 
         return new BaseResponse<>(gptResponseVo);
     }

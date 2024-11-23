@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PromptResponseVo {
+public class PromptDetailsResponseVo {
 
     private String replyFormat;
     private String request;

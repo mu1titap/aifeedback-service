@@ -1,12 +1,12 @@
 package com.multitap.feedback.application.port.out;
 
-import com.multitap.feedback.adaptor.in.vo.PromptRequestVo;
-import com.multitap.feedback.application.port.in.dto.in.PromptRequestDto;
+import com.multitap.feedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
+import com.multitap.feedback.application.port.in.dto.in.RetrievePromptRequestVo;
 import org.springframework.stereotype.Component;
 
 @Component
 public interface PromptApiPort {
 
-    PromptRequestVo callPromptApi(PromptRequestDto promptRequestDto);
+    PromptDetailsResponseVo callPromptApi(RetrievePromptRequestVo retrievePromptRequestVo);
 
 }

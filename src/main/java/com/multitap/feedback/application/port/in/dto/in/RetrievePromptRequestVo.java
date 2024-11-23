@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PromptRequestDto {
+public class RetrievePromptRequestVo {
 
-    private String industry;
+    private String industryType;
     private String documentType;
 
     @Builder
-    public PromptRequestDto(String industry, String documentType) {
-        this.industry = industry;
+    public RetrievePromptRequestVo(String industryType, String documentType) {
+        this.industryType = industryType;
         this.documentType = documentType;
     }
 }

@@ -1,16 +1,15 @@
 package com.multitap.feedback.adaptor.in.mapper;
 
-import com.multitap.feedback.adaptor.in.vo.PromptRequestVo;
-import com.multitap.feedback.application.port.in.dto.in.PromptRequestDto;
+import com.multitap.feedback.application.port.in.dto.in.RetrievePromptRequestVo;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PromptVoMapper {
 
-    public static PromptRequestDto from(PromptRequestVo promptRequestVo) {
-        return PromptRequestDto.builder()
-                .industry(promptRequestVo.getIndustry())
-                .documentType(promptRequestVo.getDocumentType())
+    public static RetrievePromptRequestVo from(String industryType, String documentType) {
+        return RetrievePromptRequestVo.builder()
+                .industryType(industryType)
+                .documentType(documentType)
                 .build();
 
     }
