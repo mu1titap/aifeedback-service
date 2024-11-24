@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatusCode;
 
 import static com.multitap.feedback.common.response.BaseResponseStatus.SUCCESS;
 
-
 public record BaseResponse<T>(HttpStatusCode httpStatus, Boolean isSuccess, String message, int code, T result) {
 
     /**

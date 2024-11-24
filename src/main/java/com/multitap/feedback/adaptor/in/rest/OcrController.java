@@ -44,7 +44,7 @@ public class OcrController {
 
         // GPT 피드백 요청
         GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(ocrProcessedFeedbackRequest, promptDetailsResponseVo);
-        log.info("GPT API 피드백 요청 값 : {}", ocrProcessedFeedbackRequest.getContent());
+        log.info("GPT API 피드백 응답 값 : {}", gptResponseVo.getGptResponseContent());
 
         return new BaseResponse<>(gptResponseVo);
     }
