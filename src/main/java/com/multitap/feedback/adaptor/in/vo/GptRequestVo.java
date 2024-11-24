@@ -15,7 +15,7 @@ public class GptRequestVo {
         this.prompt = prompt;
     }
 
-    public GptRequestVo from(String prompt) {
+    public static GptRequestVo from(String prompt) {
         return GptRequestVo.builder()
                 .prompt(prompt)
                 .build();

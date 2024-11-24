@@ -1,5 +1,6 @@
 package com.multitap.feedback.adaptor.out.gpt.presentation;
 
+import com.multitap.feedback.adaptor.in.vo.GptRequestVo;
 import com.multitap.feedback.adaptor.out.gpt.vo.GptResponseVo;
 import com.multitap.feedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import com.multitap.feedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
@@ -35,4 +36,9 @@ public class GptApiAdapter implements GptApiPort {
         return GptResponseVo.from(gptResponseDto.getChoices().get(0).getMessage().getContent());
     }
 
+    @Override
+    public GptResponseVo completions(GptRequestVo gptRequestVo) {
+      GptResponseDto gptResponseDto = gptRestTemplate.postForObject(apiUrl,GptRequestDto.from(model,gptRequestVo.getPrompt()),GptResponseDto.class);
+        return GptResponseVo.from(gptResponseDto.getChoices().get(0).getMessage().getContent());
+    }
 }
