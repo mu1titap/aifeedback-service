@@ -18,26 +18,60 @@ public class GptResponseVo {
     }
 
     public static GptResponseVo from(String content) {
+        try {
+            // content가 null이거나 빈 문자열인 경우 처리
+            if (content == null || content.trim().isEmpty()) {
+                return GptResponseVo.builder()
+                        .improvements("")
+                        .strengths("")
+                        .build();
+            }
 
-        String improvements = extractContent(content, "개선할 점:", "장점:");
-        String strengths = extractContent(content, "장점:", null);
+            String improvements = extractContent(content, "개선할 점:", "장점:");
+            String strengths = extractContent(content, "장점:", null);
 
-        return GptResponseVo.builder()
-                .improvements(improvements)
-                .strengths(strengths)
-                .build();
+            return GptResponseVo.builder()
+                    .improvements(improvements)
+                    .strengths(strengths)
+                    .build();
+        } catch (Exception e) {
+            // 파싱 실패시 빈 문자열 반환
+            return GptResponseVo.builder()
+                    .improvements("")
+                    .strengths("")
+                    .build();
+        }
     }
 
     private static String extractContent(String content, String startMarker, String endMarker) {
-        int startIndex = content.indexOf(startMarker) + startMarker.length();
-        int endIndex = endMarker != null ? content.indexOf(endMarker) : content.length();
+        try {
+            int startIdx = content.indexOf(startMarker);
+            if (startIdx == -1) {
+                return ""; // 시작 마커를 찾지 못한 경우
+            }
 
-        return content.substring(startIndex, endIndex)
-                .replaceAll("\n", " ")  // 개행문자 제거
-                .replaceAll("- ", "")   // 불렛 포인트 제거
-                .trim();
+            startIdx += startMarker.length();
 
+            int endIdx;
+            if (endMarker == null) {
+                endIdx = content.length();
+            } else {
+                endIdx = content.indexOf(endMarker, startIdx);
+                if (endIdx == -1) {
+                    endIdx = content.length();
+                }
+            }
+
+            if (startIdx >= endIdx) {
+                return ""; // 유효하지 않은 인덱스 범위
+            }
+
+            return content.substring(startIdx, endIdx)
+                    .replaceAll("\n", " ")  // 개행문자 제거
+                    .replaceAll("- ", "")   // 불렛 포인트 제거
+                    .trim();
+        } catch (Exception e) {
+            return ""; // 예외 발생시 빈 문자열 반환
+        }
     }
 }
-
-
