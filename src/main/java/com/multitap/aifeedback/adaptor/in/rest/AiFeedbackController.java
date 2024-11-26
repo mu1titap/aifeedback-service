@@ -2,8 +2,6 @@ package com.multitap.aifeedback.adaptor.in.rest;
 
 import com.multitap.aifeedback.adaptor.in.mapper.OcrVoMapper;
 import com.multitap.aifeedback.adaptor.in.mapper.PromptVoMapper;
-import com.multitap.aifeedback.adaptor.in.mapper.TextVoMapper;
-import com.multitap.aifeedback.adaptor.in.vo.GptRequestVo;
 import com.multitap.aifeedback.adaptor.in.vo.TextRequestVo;
 import com.multitap.aifeedback.adaptor.out.gpt.vo.GptResponseVo;
 import com.multitap.aifeedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
@@ -11,7 +9,6 @@ import com.multitap.aifeedback.application.port.in.GptUseCase;
 import com.multitap.aifeedback.application.port.in.OcrUseCase;
 import com.multitap.aifeedback.application.port.in.PromptUseCase;
 import com.multitap.aifeedback.application.port.in.dto.in.CombinedPromptRequestDto;
-import com.multitap.aifeedback.application.port.in.dto.in.GptRequestDto;
 import com.multitap.aifeedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.aifeedback.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +23,7 @@ import java.io.IOException;
 @RequestMapping("/ai-feedback")
 @RequiredArgsConstructor
 @Slf4j
-public class OcrController {
+public class AiFeedbackController {
 
     private final OcrUseCase ocrUseCase;
     private final PromptUseCase promptUseCase;
@@ -49,7 +46,7 @@ public class OcrController {
 
         // GPT 피드백 요청 (ocr 값 + prompt 값 합쳐서 전달)
         GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(ocrProcessedFeedbackRequest, promptDetailsResponseVo));
-        log.info("GPT API 피드백 응답 값 : {}", gptResponseVo.getGptResponseContent());
+        log.info("GPT API 피드백 응답 값 : {},{}", gptResponseVo.getImprovements(), gptResponseVo.getStrengths());
 
         return new BaseResponse<>(gptResponseVo);
     }
