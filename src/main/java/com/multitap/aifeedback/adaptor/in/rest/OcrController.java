@@ -10,6 +10,7 @@ import com.multitap.aifeedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import com.multitap.aifeedback.application.port.in.GptUseCase;
 import com.multitap.aifeedback.application.port.in.OcrUseCase;
 import com.multitap.aifeedback.application.port.in.PromptUseCase;
+import com.multitap.aifeedback.application.port.in.dto.in.CombinedPromptRequestDto;
 import com.multitap.aifeedback.application.port.in.dto.in.GptRequestDto;
 import com.multitap.aifeedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
 import com.multitap.aifeedback.common.response.BaseResponse;
@@ -42,12 +43,12 @@ public class OcrController {
         OcrProcessedFeedbackRequest ocrProcessedFeedbackRequest = ocrUseCase.uploadPdfForOcr(OcrVoMapper.from(file));
         log.info("ocr 분석 완료 : {}", ocrProcessedFeedbackRequest.getContent());
 
-        // ocr 분석 값과 프롬프트 합치기
+        // 프롬프트 가져오기
         PromptDetailsResponseVo promptDetailsResponseVo = promptUseCase.sendRequestPrompt(PromptVoMapper.from(industryType, documentType));
         log.info("프롬프트 : {}", promptDetailsResponseVo.getRequest());
 
-        // GPT 피드백 요청
-        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToOcr(ocrProcessedFeedbackRequest, promptDetailsResponseVo);
+        // GPT 피드백 요청 (ocr 값 + prompt 값 합쳐서 전달)
+        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(ocrProcessedFeedbackRequest, promptDetailsResponseVo));
         log.info("GPT API 피드백 응답 값 : {}", gptResponseVo.getGptResponseContent());
 
         return new BaseResponse<>(gptResponseVo);
@@ -56,6 +57,13 @@ public class OcrController {
     @Operation(summary = "text 업로드", description = "[자소서] text 제한 1500자")
     @PostMapping("text")
     public BaseResponse<GptResponseVo> textSubmit(@RequestParam("industryType") String industryType, @RequestParam("documentType") String documentType, @RequestBody TextRequestVo textRequestVo) throws IOException {
-        gptUseCase.sendFeedbackRequestToText(TextVoMapper.from(textRequestVo));
+
+        // 프롬프트 가져오기
+        PromptDetailsResponseVo promptDetailsResponseVo = promptUseCase.sendRequestPrompt(PromptVoMapper.from(industryType, documentType));
+
+        // GPT 피드백 요청
+        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(textRequestVo, promptDetailsResponseVo));
+
+        return new BaseResponse<>(gptResponseVo);
     }
 }
