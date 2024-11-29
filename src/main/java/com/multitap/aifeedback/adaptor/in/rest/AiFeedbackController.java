@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+//todo: main merge하기
 @RestController
 @RequestMapping("/ai-feedback")
 @RequiredArgsConstructor
