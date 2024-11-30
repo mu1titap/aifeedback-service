@@ -1,11 +1,8 @@
 package com.multitap.aifeedback.application.service;
 
 import com.multitap.aifeedback.adaptor.out.gpt.vo.GptResponseVo;
-import com.multitap.aifeedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import com.multitap.aifeedback.application.port.in.GptUseCase;
 import com.multitap.aifeedback.application.port.in.dto.in.CombinedPromptRequestDto;
-import com.multitap.aifeedback.application.port.in.dto.in.OcrProcessedFeedbackRequest;
-import com.multitap.aifeedback.application.port.in.dto.in.TextRequestDto;
 import com.multitap.aifeedback.application.port.out.GptApiPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class GptService implements GptUseCase {
 
     private final GptApiPort gptApiPort;
-
 
     @Override
     public GptResponseVo sendFeedbackRequestToGpt(CombinedPromptRequestDto combinedPromptRequestDto) {
