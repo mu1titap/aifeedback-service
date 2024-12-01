@@ -6,22 +6,22 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GptResponseVo {
+public class AiFeedbackResponseVo {
 
     private String improvements;
     private String strengths;
 
     @Builder
-    public GptResponseVo(String improvements, String strengths) {
+    public AiFeedbackResponseVo(String improvements, String strengths) {
         this.improvements = improvements;
         this.strengths = strengths;
     }
 
-    public static GptResponseVo from(String content) {
+    public static AiFeedbackResponseVo from(String content) {
         try {
             // content가 null이거나 빈 문자열인 경우 처리
             if (content == null || content.trim().isEmpty()) {
-                return GptResponseVo.builder()
+                return AiFeedbackResponseVo.builder()
                         .improvements("")
                         .strengths("")
                         .build();
@@ -30,13 +30,13 @@ public class GptResponseVo {
             String improvements = extractContent(content, "개선할 점:", "장점:");
             String strengths = extractContent(content, "장점:", null);
 
-            return GptResponseVo.builder()
+            return AiFeedbackResponseVo.builder()
                     .improvements(improvements)
                     .strengths(strengths)
                     .build();
         } catch (Exception e) {
             // 파싱 실패시 빈 문자열 반환
-            return GptResponseVo.builder()
+            return AiFeedbackResponseVo.builder()
                     .improvements("")
                     .strengths("")
                     .build();
