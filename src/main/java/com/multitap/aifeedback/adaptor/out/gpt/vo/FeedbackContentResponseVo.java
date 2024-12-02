@@ -6,21 +6,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class FeedbackRecordResponseVo {
+public class FeedbackContentResponseVo {
 
     private String uuid;
     private String categoryCode;
     private Object content;
 
     @Builder
-    public FeedbackRecordResponseVo(String uuid, String categoryCode, Object content) {
+    public FeedbackContentResponseVo(String uuid, String categoryCode, Object content) {
         this.uuid = uuid;
         this.categoryCode = categoryCode;
         this.content = content;
     }
 
-    public static FeedbackRecordResponseVo from(String uuid, String categoryCode, Object content) {
-        return FeedbackRecordResponseVo.builder()
+    public static FeedbackContentResponseVo from(String uuid, String categoryCode, Object content) {
+        return FeedbackContentResponseVo.builder()
                 .uuid(uuid)
                 .categoryCode(categoryCode)
                 .content(content)

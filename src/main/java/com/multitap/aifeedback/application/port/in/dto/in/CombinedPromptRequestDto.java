@@ -3,7 +3,6 @@ package com.multitap.aifeedback.application.port.in.dto.in;
 import com.multitap.aifeedback.adaptor.in.kafka.messagein.FeedbackScorePromptDto;
 import com.multitap.aifeedback.adaptor.in.vo.TextRequestVo;
 import com.multitap.aifeedback.adaptor.out.gpt.vo.AiFeedbackResponseVo;
-import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackRecordResponseVo;
 import com.multitap.aifeedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.multitap.aifeedback.application.service;
 
-import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackRecordResponseVo;
+import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackContentResponseVo;
 import com.multitap.aifeedback.application.port.in.KafkaUseCase;
 import com.multitap.aifeedback.application.port.out.KafkaPort;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class KafkaService implements KafkaUseCase {
     private final KafkaPort kafkaPort;
 
     @Override
-    public void sendFeedbackScoreResult(FeedbackRecordResponseVo feedbackRecordResponseVo) {
-        kafkaPort.sendFeedbackRecordGptResponse(feedbackRecordResponseVo);
+    public void sendFeedbackScoreResult(FeedbackContentResponseVo feedbackContentResponseVo) {
+        kafkaPort.sendFeedbackRecordGptResponse(feedbackContentResponseVo);
     }
 }

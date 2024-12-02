@@ -1,8 +1,8 @@
 package com.multitap.aifeedback.application.port.in;
 
 
-import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackRecordResponseVo;
+import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackContentResponseVo;
 
 public interface KafkaUseCase {
-    void sendFeedbackScoreResult(FeedbackRecordResponseVo feedbackRecordResponseVo);
+    void sendFeedbackScoreResult(FeedbackContentResponseVo feedbackContentResponseVo);
 }

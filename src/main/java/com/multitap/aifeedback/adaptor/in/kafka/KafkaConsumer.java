@@ -2,7 +2,7 @@ package com.multitap.aifeedback.adaptor.in.kafka;
 
 
 import com.multitap.aifeedback.adaptor.in.kafka.messagein.FeedbackScorePromptDto;
-import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackRecordResponseVo;
+import com.multitap.aifeedback.adaptor.out.gpt.vo.FeedbackContentResponseVo;
 import com.multitap.aifeedback.application.port.in.GptUseCase;
 import com.multitap.aifeedback.application.port.in.KafkaUseCase;
 import com.multitap.aifeedback.application.port.in.dto.in.CombinedPromptRequestDto;
@@ -24,7 +24,8 @@ public class KafkaConsumer {
         // gpt 피드백 요청
         Object gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(feedbackScorePromptDto.getFeedbackScoreDto(),feedbackScorePromptDto.getPromptDetails()));
 
+        log.info("uuid :{}", feedbackScorePromptDto.getFeedbackScoreDto().getUuid());
         //kafka topic 발행
-        kafkaUseCase.sendFeedbackScoreResult(FeedbackRecordResponseVo.from(feedbackScorePromptDto.getFeedbackScoreDto().getUuid(), feedbackScorePromptDto.getFeedbackScoreDto().getCategoryCode(),gptResponseVo));
+        kafkaUseCase.sendFeedbackScoreResult(FeedbackContentResponseVo.from(feedbackScorePromptDto.getFeedbackScoreDto().getUuid(), feedbackScorePromptDto.getFeedbackScoreDto().getCategoryCode(),gptResponseVo));
     }
 }
