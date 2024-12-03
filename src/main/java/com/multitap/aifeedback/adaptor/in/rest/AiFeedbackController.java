@@ -3,7 +3,7 @@ package com.multitap.aifeedback.adaptor.in.rest;
 import com.multitap.aifeedback.adaptor.in.mapper.OcrVoMapper;
 import com.multitap.aifeedback.adaptor.in.mapper.PromptVoMapper;
 import com.multitap.aifeedback.adaptor.in.vo.TextRequestVo;
-import com.multitap.aifeedback.adaptor.out.gpt.vo.GptResponseVo;
+import com.multitap.aifeedback.adaptor.out.gpt.vo.AiFeedbackResponseVo;
 import com.multitap.aifeedback.adaptor.out.prompt.vo.PromptDetailsResponseVo;
 import com.multitap.aifeedback.application.port.in.GptUseCase;
 import com.multitap.aifeedback.application.port.in.OcrUseCase;
@@ -32,8 +32,8 @@ public class AiFeedbackController {
 
     @Operation(summary = "pdf 파일 업로드", description = "[이력서, 포트폴리오] pdf 파일 용량은 10MB로 제한")
     @PostMapping(value = "/pdf", consumes = "multipart/form-data")
-    public BaseResponse<GptResponseVo> pdfSubmit(@RequestParam("file") MultipartFile file, @RequestParam("industryType") String industryType,
-                                                 @RequestParam("documentType") String documentType) throws IOException {
+    public BaseResponse<Object> pdfSubmit(@RequestParam("file") MultipartFile file, @RequestParam("industryType") String industryType,
+                                                        @RequestParam("documentType") String documentType) throws IOException {
 
         log.info("산업,문서타입: {},{}", industryType, documentType);
 
@@ -46,22 +46,21 @@ public class AiFeedbackController {
         log.info("프롬프트 : {}", promptDetailsResponseVo.getRequest());
 
         // GPT 피드백 요청 (ocr 값 + prompt 값 합쳐서 전달)
-        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(ocrProcessedFeedbackRequest, promptDetailsResponseVo));
-        log.info("GPT API 피드백 응답 값 : {},{}", gptResponseVo.getImprovements(), gptResponseVo.getStrengths());
+        Object aiFeedbackResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(ocrProcessedFeedbackRequest, promptDetailsResponseVo));
 
-        return new BaseResponse<>(gptResponseVo);
+        return new BaseResponse<>(aiFeedbackResponseVo);
     }
 
     @Operation(summary = "text 업로드", description = "[자소서] text 제한 1500자")
     @PostMapping("text")
-    public BaseResponse<GptResponseVo> textSubmit(@RequestParam("industryType") String industryType, @RequestParam("documentType") String documentType, @RequestBody TextRequestVo textRequestVo) throws IOException {
+    public BaseResponse<Object> textSubmit(@RequestParam("industryType") String industryType, @RequestParam("documentType") String documentType, @RequestBody TextRequestVo textRequestVo) throws IOException {
 
         // 프롬프트 가져오기
         PromptDetailsResponseVo promptDetailsResponseVo = promptUseCase.sendRequestPrompt(PromptVoMapper.from(industryType, documentType));
 
         // GPT 피드백 요청
-        GptResponseVo gptResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(textRequestVo, promptDetailsResponseVo));
+        Object aiFeedbackResponseVo = gptUseCase.sendFeedbackRequestToGpt(CombinedPromptRequestDto.of(textRequestVo, promptDetailsResponseVo));
 
-        return new BaseResponse<>(gptResponseVo);
+        return new BaseResponse<>(aiFeedbackResponseVo);
     }
 }

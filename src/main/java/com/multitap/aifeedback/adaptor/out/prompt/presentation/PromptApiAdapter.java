@@ -55,4 +55,8 @@ public class PromptApiAdapter implements PromptApiPort {
             throw new RuntimeException("프롬프트 API 호출 실패", e);
         }
     }
+
+    //todo: 여기서 프롬프트랑 요청값 정돈해서 아웃포트를 나오면
+
+
 }

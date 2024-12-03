@@ -28,14 +28,14 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .addServersItem(new Server().url("/"))
+                .addServersItem(new Server().url("/aifeedback-service"))
                 .info(apiInfo());
     }
 
     private Info apiInfo() {
         return new Info()
-                .title("MEMBER SERVICE")
-                .description("MEMBER SERVICE Swagger UI")
+                .title("AIFEEDBACK SERVICE")
+                .description("AIFEEDBACK SERVICE Swagger UI")
                 .version("1.0.0");
     }
 }
