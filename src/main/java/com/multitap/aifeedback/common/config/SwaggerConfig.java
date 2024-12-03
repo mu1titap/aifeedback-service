@@ -29,6 +29,8 @@ public class SwaggerConfig {
                 .addSecurityItem(securityRequirement)
                 .components(components)
                 .addServersItem(new Server().url("/aifeedback-service"))
+                .addServersItem(new Server().url("/"))
+
                 .info(apiInfo());
     }
 
