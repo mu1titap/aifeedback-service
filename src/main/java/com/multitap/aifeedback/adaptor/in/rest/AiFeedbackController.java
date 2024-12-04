@@ -21,7 +21,7 @@ import java.io.IOException;
 
 //todo: main merge하기, feat/4 로 이전
 @RestController
-@RequestMapping("/ai-feedback")
+@RequestMapping("/api/v1/ai-feedback")
 @RequiredArgsConstructor
 @Slf4j
 public class AiFeedbackController {
