@@ -19,39 +19,36 @@ public class AiFeedbackResponseVo {
 
     public static AiFeedbackResponseVo from(String content) {
         try {
-            // content가 null이거나 빈 문자열인 경우 처리
             if (content == null || content.trim().isEmpty()) {
-                return AiFeedbackResponseVo.builder()
-                        .improvements("")
-                        .strengths("")
-                        .build();
+                return createEmptyResponse();
             }
 
-            String improvements = extractContent(content, "개선할 점:", "장점:");
-            String strengths = extractContent(content, "장점:", null);
+            // 문자열 정규화: 여러 줄바꿈을 단일 줄바꿈으로 변환
+            content = content.replaceAll("\\n+", "\n").trim();
+
+            // 개선할 점과 장점 섹션 추출
+            String improvements = extractSection(content, "개선할 점:", "장점:");
+            String strengths = extractSection(content, "장점:", null);
 
             return AiFeedbackResponseVo.builder()
                     .improvements(improvements)
                     .strengths(strengths)
                     .build();
         } catch (Exception e) {
-            // 파싱 실패시 빈 문자열 반환
-            return AiFeedbackResponseVo.builder()
-                    .improvements("")
-                    .strengths("")
-                    .build();
+            return createEmptyResponse();
         }
     }
 
-    private static String extractContent(String content, String startMarker, String endMarker) {
+    private static String extractSection(String content, String startMarker, String endMarker) {
         try {
+            // 1. 시작 위치 찾기
             int startIdx = content.indexOf(startMarker);
             if (startIdx == -1) {
-                return ""; // 시작 마커를 찾지 못한 경우
+                return "";
             }
-
             startIdx += startMarker.length();
 
+            // 2. 끝 위치 찾기
             int endIdx;
             if (endMarker == null) {
                 endIdx = content.length();
@@ -63,15 +60,31 @@ public class AiFeedbackResponseVo {
             }
 
             if (startIdx >= endIdx) {
-                return ""; // 유효하지 않은 인덱스 범위
+                return "";
             }
 
-            return content.substring(startIdx, endIdx)
-                    .replaceAll("\n", " ")  // 개행문자 제거
-                    .replaceAll("- ", "")   // 불렛 포인트 제거
-                    .trim();
+            // 3. 내용 추출 및 정제
+            String extractedContent = content.substring(startIdx, endIdx).trim();
+
+            // 4. 텍스트 정제
+            return cleanText(extractedContent);
         } catch (Exception e) {
-            return ""; // 예외 발생시 빈 문자열 반환
+            return "";
         }
+    }
+
+    private static String cleanText(String text) {
+        return text
+                .replaceAll("(?m)^\\s*-\\s*", "") // 줄 시작 부분의 불렛 포인트 제거
+                .replaceAll("\\n\\s*", " ") // 줄바꿈과 그 뒤의 공백 제거
+                .replaceAll("\\s+", " ") // 연속된 공백을 하나로 통합
+                .trim();
+    }
+
+    private static AiFeedbackResponseVo createEmptyResponse() {
+        return AiFeedbackResponseVo.builder()
+                .improvements("")
+                .strengths("")
+                .build();
     }
 }
