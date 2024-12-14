@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Getter
 @NoArgsConstructor
 public class AiFeedbackResponseVo {
@@ -27,8 +30,8 @@ public class AiFeedbackResponseVo {
             content = content.replaceAll("\\n+", "\n").trim();
 
             // 개선할 점과 장점 섹션 추출
-            String improvements = extractSection(content, "개선할 점:", "장점:");
-            String strengths = extractSection(content, "장점:", null);
+            String improvements = extractSection(content, "개선할 점", "장점");
+            String strengths = extractSection(content, "장점", null);
 
             return AiFeedbackResponseVo.builder()
                     .improvements(improvements)
@@ -41,43 +44,28 @@ public class AiFeedbackResponseVo {
 
     private static String extractSection(String content, String startMarker, String endMarker) {
         try {
-            // 1. 시작 위치 찾기
-            int startIdx = content.indexOf(startMarker);
-            if (startIdx == -1) {
-                return "";
-            }
-            startIdx += startMarker.length();
-
-            // 2. 끝 위치 찾기
-            int endIdx;
+            // 1. 섹션 구분을 위한 정규식 활용
+            Pattern pattern;
             if (endMarker == null) {
-                endIdx = content.length();
+                pattern = Pattern.compile(startMarker + ":(.*)", Pattern.DOTALL);
             } else {
-                endIdx = content.indexOf(endMarker, startIdx);
-                if (endIdx == -1) {
-                    endIdx = content.length();
-                }
+                pattern = Pattern.compile(startMarker + ":(.*)" + endMarker + ":", Pattern.DOTALL);
             }
 
-            if (startIdx >= endIdx) {
-                return "";
+            Matcher matcher = pattern.matcher(content);
+            if (matcher.find()) {
+                return cleanText(matcher.group(1));
             }
-
-            // 3. 내용 추출 및 정제
-            String extractedContent = content.substring(startIdx, endIdx).trim();
-
-            // 4. 텍스트 정제
-            return cleanText(extractedContent);
         } catch (Exception e) {
-            return "";
+            // 에러 발생 시 빈 문자열 반환
         }
+        return "";
     }
 
     private static String cleanText(String text) {
-        return text
-                .replaceAll("(?m)^\\s*-\\s*", "") // 줄 시작 부분의 불렛 포인트 제거
-                .replaceAll("\\n\\s*", " ") // 줄바꿈과 그 뒤의 공백 제거
-                .replaceAll("\\s+", " ") // 연속된 공백을 하나로 통합
+        return text.replaceAll("(?m)^\\s*-\\s*", "") // 불렛 포인트 제거
+                .replaceAll("\\n\\s*", " ") // 줄바꿈 제거
+                .replaceAll("\\s+", " ") // 연속된 공백 제거
                 .trim();
     }
 
@@ -87,4 +75,5 @@ public class AiFeedbackResponseVo {
                 .strengths("")
                 .build();
     }
+
 }
